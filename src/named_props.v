@@ -327,20 +327,6 @@ Tactic Notation "iNamedAccu" :=
       ]
   ].
 
-Ltac iRed :=
-  lazymatch goal with
-  | [ |- envs_entails _ ?g ] =>
-    let g' := (eval red in g) in
-    change_no_check g with g'
-  end.
-
-Ltac iHnf :=
-  lazymatch goal with
-  | [ |- envs_entails _ ?g ] =>
-    let g' := (eval hnf in g) in
-    change_no_check g with g'
-  end.
-
 Ltac iFrameNamed :=
   lazymatch goal with
   | [ |- envs_entails _ ?g ] =>
