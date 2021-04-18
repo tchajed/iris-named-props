@@ -1,0 +1,32 @@
+opam-version: "2.0"
+maintainer: "tchajed@mit.edu"
+version: "dev"
+
+homepage: "https://github.com/tchajed/iris-named-props"
+dev-repo: "git+https://github.com/tchajed/iris-named-props.git"
+bug-reports: "https://github.com/tchajed/iris-named-props/issues"
+license: "MIT"
+
+synopsis: "Library to add names to Iris propositions"
+description: """
+Named propositions are a way to embed names in an Iris proposition and then use
+those names to automatically introduce all the conjuncts in a definition.
+"""
+
+depends: [
+  "coq" {>= "8.13"}
+  "coq-iris" {>= "dev.2021-03-06.3.b0708b01" | (>= "3.4.0" & < "4.0") | = "dev"}
+]
+
+build: [make "-j%{jobs}%"]
+install: [make "install"]
+
+tags: [
+  "category:Miscellaneous"
+  "keyword:iris"
+  "logpath:iris_named_props"
+]
+
+authors: [
+  "Tej Chajed"
+]
