@@ -125,8 +125,8 @@ Ltac iDeex :=
 (** [IsExistential] identifies propositions that should be destructed as
 existentials by [iDeex]. *)
 Class IsExistential {PROP:bi} (P: PROP) := is_existential {}.
-Arguments is_existential {PROP P} : assert.
-Instance is_existential_exist {PROP:bi} {A} (Φ: A → PROP) :
+Global Arguments is_existential {PROP P} : assert.
+Global Instance is_existential_exist {PROP:bi} {A} (Φ: A → PROP) :
   IsExistential (bi_exist Φ).
 Proof. Qed.
 
@@ -134,9 +134,9 @@ Proof. Qed.
 should be split by [iNamed] as it traverses a proposition for named conjuncts.
 *)
 Class IsSplittable {PROP:bi} (P: PROP) := is_splittable {}.
-Arguments IsSplittable {_} _%I : assert.
-Arguments is_splittable {PROP P} : assert.
-Instance is_splittable_sep {PROP:bi} (P Q: PROP) :
+Global Arguments IsSplittable {_} _%I : assert.
+Global Arguments is_splittable {PROP P} : assert.
+Global Instance is_splittable_sep {PROP:bi} (P Q: PROP) :
   IsSplittable (P ∗ Q).
 Proof. Qed.
 
@@ -366,7 +366,7 @@ attach the names correctly *)
 Notation "name ∷ P" := (named name P%I) (at level 79).
 
 (* Enable eauto to solve goals where the top-level is [named] *)
-Hint Extern 0 (environments.envs_entails _ (named _ _)) => unfold named : core.
+Global Hint Extern 0 (environments.envs_entails _ (named _ _)) => unfold named : core.
 
 (* TODO: maybe we should move tests out *)
 Module tests.
