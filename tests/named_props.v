@@ -81,14 +81,6 @@ Section tests.
     iFrame.
   Qed.
 
-  Example test_remove_named_in_goal P Q :
-    ⊢ P -∗ Q -∗ named "HP" P ∗ named "HQ" Q.
-  Proof.
-    iIntros "HP HQ".
-    prove_named.
-    iFrame.
-  Qed.
-
   Example test_exist_destruct Ψ Q :
     ⊢ (∃ x, named "HP" (Ψ x) ∗ named "HQ" Q) -∗ (∃ x, Ψ x) ∗ Q.
   Proof.

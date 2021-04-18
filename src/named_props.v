@@ -6,7 +6,7 @@ Set Default Proof Using "Type".
 (* NamedProps implements [named name P], which is equivalent to P but knows to
    name itself [name] when iIntro'd. The syntax looks like [name ∷ P], in
    analogy to in Gallina where you might write [forall (Hfoo: 3 < 4), ...] for a
-   hypothesis that would be introduced as `Hfoo` using automatic names.
+   hypothesis that would be introduced as [Hfoo] using automatic names.
 
   To use this library, write your definitions with [name ∷ P] for each conjunct.
   Then, use [iNamed "H"] to destruct an invariant "H" into its conjuncts, using
@@ -343,9 +343,6 @@ Ltac iFrameNamed :=
              end
            end
   end.
-
-Ltac prove_named :=
-  iEval (rewrite /named).
 
 (* this is crucially placed just below level 80, which is where ∗ is, so that
 you can change [P ∗ Q] to ["HP" ∷ P ∗ "HQ" ∷ Q] without adding parentheses to
