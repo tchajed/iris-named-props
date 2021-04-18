@@ -4,7 +4,9 @@
 
 Named propositions are an extension to the Iris Proof Mode (IPM) that allow you
 to embed names for conjuncts within a definition and then use those names to
-introduce or destruct the definition.
+introduce or destruct the definition. See the header comment in
+[named_props.v](src/named_props.v) for a detailed explanation with the entire
+API.
 
 ```coq
 From iris.proofmode Require Import tactics.
@@ -31,6 +33,19 @@ Proof.
 Qed.
 ```
 
-Putting the names in the definition avoid repeating the same intro pattern and
-is easier to change when the definition changes (for example, reordering and
-adding new conjuncts will have minimal impact on proof scripts).
+Putting the names in the definition avoids repeating the same intro patterns
+over and over in a proof. Not repeating yourself makes things easier to change
+when the definition changes - for example, reordering and adding new conjuncts
+will have minimal impact on proof scripts.
+
+The "names" in named propositions are not actually just names, but Iris intro
+patterns; for example `"#H"`, `"%H"` (using Iris's recent support for Coq names
+in intro patterns), and `"?"` are all potentially useful.
+
+One application of this feature implemented in the library is a tactic
+`iNamedAccu` which is like `iAccu` but remembers the names used. If you haven't
+used `iAccu`, it solves a goal which is an evar with the conjunction of the
+entire context (this kind of situation arises when you have a proof rule that
+allows saving the entire context and then restoring it elsewhere). `iNamedAccu`
+is just like `iAccu`, but it adds names to the conjuncts so that the result can
+easily be restored with the same names later.

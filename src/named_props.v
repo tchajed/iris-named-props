@@ -19,10 +19,11 @@ Set Default Proof Using "Type".
   something crazy like ["[<- H]"] to destruct the hypothesis and rewrite by the
   first conjunct.
 
-  There are a few more top-level tactics provided to work with named
+  There are a several top-level tactics provided to work with named
   propositions:
-  - [iNamed] names any anonymous hypotheses (without destructing them)
+  - [iNamed "H"] names a single hypothesis. This is the most common usage.
   - [iNamed 1] on a wand introduces and destructs the premise.
+  - [iNamed] names any anonymous hypotheses (without destructing them).
   - [iNamedAccu] is like [iAccu] - it solves a goal which is an evar with the
     conjunction of all the hypotheses - but produces a conjunction of named
     hypotheses. This is especially useful when that evar ?Q shows up as a
@@ -57,9 +58,9 @@ Section named.
   Theorem from_named name (P: PROP) : named name P -∗ P.
   Proof. auto. Qed.
 
-  (* implementation of [iNamedAccu]; the soundness proof basically shows these
+  (* Implementation of [iNamedAccu]; the soundness proof basically shows these
   definitions are equivalent to the ones used in the [iAccu] implementation,
-  since we can simply unfold [named, since we can simply unfold [named]] *)
+  since we can simply unfold [named]. *)
 
   Fixpoint env_to_named_prop_go (acc : PROP) (Γ : env PROP) : PROP :=
     match Γ with
