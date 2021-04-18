@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: coq-community/docker-coq-action@v1
         with:
-          opam_file: "iris-simp-lang.opam"
+          opam_file: "iris-named-props.opam"
           custom_image: "coqorg/coq:${{ matrix.coq }}"
           before_install: |
             startGroup "Add Iris repo"
