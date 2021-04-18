@@ -9,6 +9,7 @@ real-all: $(if $(NO_TEST),,test)
 
 # the test suite
 TESTFILES:=$(shell find tests -name "*.v")
+NORMALIZER:=test-normalizer.sed
 
 test: $(TESTFILES:.v=.vo)
 # Make sure all Instance/Argument/Hint are qualified.
@@ -32,7 +33,7 @@ tests/.coqdeps.d: $(TESTFILES)
 # - Run `sed -i` on that file in a way that works on macOS.
 # - Either compare the result with the reference file, or move it over the reference file.
 # - Cleanup, and mark as done for make.
-$(TESTFILES:.v=.vo): %.vo: %.v $(if $(MAKE_REF),,%.ref)
+$(TESTFILES:.v=.vo): %.vo: %.v $(if $(MAKE_REF),,%.ref) $(NORMALIZER)
 	$(HIDE)if test -f $*".$(COQ_MINOR_VERSION).ref"; then \
 	    REF=$*".$(COQ_MINOR_VERSION).ref"; \
 	  else \
@@ -41,6 +42,8 @@ $(TESTFILES:.v=.vo): %.vo: %.v $(if $(MAKE_REF),,%.ref)
 	  echo "COQTEST$(if $(MAKE_REF), [make ref],) $< (ref: $$REF)" && \
 	  TMPFILE="$$(mktemp)" && \
 	  $(TIMER) $(COQ_TEST) $(COQFLAGS) $(COQLIBS) -load-vernac-source $< > "$$TMPFILE" && \
+	  sed -f $(NORMALIZER) "$$TMPFILE" > "$$TMPFILE".new && \
+	  mv "$$TMPFILE".new "$$TMPFILE" && \
 	  $(if $(MAKE_REF),mv "$$TMPFILE" "$$REF",diff -u "$$REF" "$$TMPFILE") && \
 	  rm -f "$$TMPFILE" && \
 	  touch $@
