@@ -1,0 +1,21 @@
+1 focused goal
+(shelved: 1)
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  P, Q, R : PROP
+  ============================
+  "HQ" : Q
+  --------------------------------------∗
+  True ∗ ?remainder
+  
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  P, Q, R : PROP
+  ============================
+  "HQ" : Q
+  --------------------------------------∗
+  Q
+  

@@ -49,3 +49,12 @@ entire context (this kind of situation arises when you have a proof rule that
 allows saving the entire context and then restoring it elsewhere). `iNamedAccu`
 is just like `iAccu`, but it adds names to the conjuncts so that the result can
 easily be restored with the same names later.
+
+For an example of using `iNamedAccu`, see
+[tests/split_delay.v](tests/split_delay.v). We implemented a simple tactic
+`iSplitDelay` that puts all hypotheses on the left side but changes the goal
+from `Q1 ∗ Q2` to `(Q1 ∗ ?rest) ∗ (?rest -∗ ?Q2)`. The result is that you can
+prove `Q1` on the left, use `iNamedAccu` to fill `?rest` with the remaining
+hypotheses, and then use `iNamed 1` in the second goal to get back all the
+remaining hypotheses. The upshot is that you don't need to decide upfront how to
+split the context.

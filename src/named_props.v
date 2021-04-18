@@ -105,6 +105,13 @@ Section named.
     apply coq_tactics.tac_accu.
   Qed.
 
+  Lemma tac_delay_split (R P Q: PROP) :
+    (P ∗ R) -∗ (R -∗ Q) -∗ P ∗ Q.
+  Proof.
+    iIntros "[$ R] Hwand".
+    iApply ("Hwand" with "R").
+  Qed.
+
 End named.
 
 Ltac to_pm_ident H :=
@@ -351,3 +358,10 @@ Notation "name ∷ P" := (named name P%I) (at level 79).
 
 (* Enable eauto to solve goals where the top-level is [named] *)
 Global Hint Extern 0 (environments.envs_entails _ (named _ _)) => unfold named : core.
+
+Ltac iSplitDelay :=
+  let PROP := iBiOfGoal in
+  let R := fresh "remainder" in
+  evar (R:PROP.(bi_car));
+  iApply (tac_delay_split R with "[-] []");
+  subst R.
