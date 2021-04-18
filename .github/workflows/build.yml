@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "**"
+  schedule:
+    # every day at 11am UTC (6am EST)
+    - cron: "0 11 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - "coqorg/coq:dev"
+          - "coqorg/coq:8.13"
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: coq-community/docker-coq-action@v1
+        with:
+          opam_file: "iris-simp-lang.opam"
+          custom_image: ${{ matrix.image }}
+          before_install: |
+            startGroup "Add Iris repo"
+              opam repo add iris-dev https://gitlab.mpi-sws.org/iris/opam.git
+            endGroup
+            startGroup "Print opam config"
+              opam config list; opam repo list; opam list
+            endGroup
+
+# See also:
+# https://github.com/coq-community/docker-coq-action#readme
+# https://github.com/erikmd/docker-coq-github-action-demo
