@@ -1,5 +1,5 @@
 From iris.proofmode Require Import tactics.
-From iris_named_props Require Import NamedProps.
+From iris_named_props Require Import named_props.
 
 Set Default Proof Using "All".
 Section tests.
