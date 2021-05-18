@@ -1,4 +1,4 @@
-# Named propsitions for Iris
+# Named propositions for Iris
 
 [![CI](https://github.com/tchajed/iris-named-props/workflows/CI/badge.svg)](https://github.com/tchajed/iris-named-props/actions?query=workflow%3ACI)
 
