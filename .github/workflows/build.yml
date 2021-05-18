@@ -10,6 +10,7 @@ on:
   schedule:
     # every day at 11am UTC (6am EST)
     - cron: "0 11 * * *"
+  workflow_dispatch:
 
 jobs:
   build:
