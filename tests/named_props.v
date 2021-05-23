@@ -1,4 +1,4 @@
-From iris.proofmode Require Import tactics.
+From iris.proofmode Require Import tactics monpred.
 From iris_named_props Require Import named_props.
 
 Set Default Proof Using "All".
@@ -303,6 +303,17 @@ Section tests.
       (* should recover the same context (modulo renaming of anonymous
       hypotheses) *)
       iFrame.
+  Qed.
+
+  Check "test_monpred_named".
+  Example test_monpred_named {I : biIndex} P1 (P2 : monPred I PROP) :
+    "H1" ∷ ⎡P1⎤ ∗ "H2" ∷ P2 -∗ ⎡P1⎤ ∗ P2.
+  Proof.
+    iStartProof PROP.
+    iIntros (i).
+    Show.
+    iNamed 1.
+    iFrame "H1 H2".
   Qed.
 
 End tests.

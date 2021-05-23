@@ -1,5 +1,5 @@
 From iris.proofmode Require Import string_ident.
-From iris.proofmode Require Import tactics environments intro_patterns.
+From iris.proofmode Require Import tactics environments intro_patterns monpred.
 
 Set Default Proof Using "Type".
 
@@ -147,6 +147,16 @@ Global Arguments is_splittable {PROP P} : assert.
 Global Instance is_splittable_sep {PROP:bi} (P Q: PROP) :
   IsSplittable (P ∗ Q).
 Proof. Qed.
+
+Lemma make_monPred_at_named {I : biIndex} {PROP : bi} name (i : I) (P : monPred I PROP) (𝓟 : PROP) :
+  MakeMonPredAt i P 𝓟 →
+  MakeMonPredAt i (named name P) (named name 𝓟).
+Proof. done. Qed.
+
+(* This is not an instance since Coq would try and apply the instance at every
+step in the type class resolution since [named name P] unfolds to just [P].
+Instead we register a hint that only applies when the goal contains [named]. *)
+Global Hint Extern 0 (MakeMonPredAt _ (named _ _) _) => apply make_monPred_at_named : typeclass_instances.
 
 (** tc_is_inhabited succeeds if P is an inhabited typeclass and fails otherwise.
 *)
