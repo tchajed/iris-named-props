@@ -19,6 +19,7 @@ jobs:
       matrix:
         coq:
           - "dev"
+          - "8.14"
           - "8.13"
       fail-fast: false
     steps:

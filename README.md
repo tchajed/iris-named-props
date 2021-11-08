@@ -8,6 +8,8 @@ introduce or destruct the definition. See the header comment in
 [named_props.v](src/named_props.v) for a detailed explanation with the entire
 API.
 
+This library is compatible with Iris 3.5 and Coq 8.13+.
+
 ```coq
 From iris.proofmode Require Import tactics.
 From iris_named_props Require Import named_props.
