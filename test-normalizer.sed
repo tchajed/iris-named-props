@@ -5,3 +5,5 @@ s/subgoal/goal/g
 /^$/d
 # lines merged due to https://github.com/coq/coq/pull/14999
 /[0-9]* focused goals\?$/{N;s/\n */ /;}
+# locations in Fail added in https://github.com/coq/coq/pull/15174
+/^File/d
