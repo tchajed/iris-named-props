@@ -1,6 +1,6 @@
 # Named propositions for Iris
 
-[![CI](https://github.com/tchajed/iris-named-props/workflows/CI/badge.svg)](https://github.com/tchajed/iris-named-props/actions?query=workflow%3ACI)
+[![CI](https://github.com/tchajed/iris-named-props/workflows/CI/badge.svg)](https://github.com/tchajed/iris-named-props/actions/workflows/build.yml?query=workflow%3ACI)
 
 Named propositions are an extension to the Iris Proof Mode (IPM) that allow you
 to embed names for conjuncts within a definition and then use those names to
@@ -8,7 +8,7 @@ introduce or destruct the definition. See the header comment in
 [named_props.v](src/named_props.v) for a detailed explanation with the entire
 API.
 
-This library is compatible with Iris 3.5 and Coq 8.13+.
+This library is compatible with the latest version of Iris and Coq 8.13+.
 
 ```coq
 From iris.proofmode Require Import tactics.

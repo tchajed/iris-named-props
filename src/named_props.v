@@ -3,9 +3,9 @@ From iris.proofmode Require Import tactics environments intro_patterns monpred.
 
 Set Default Proof Using "Type".
 
-(* NamedProps implements [named name P], which is equivalent to P but knows to
-   name itself [name] when iIntro'd. The syntax looks like [name ∷ P], in
-   analogy to in Gallina where you might write [forall (Hfoo: 3 < 4), ...] for a
+(* NamedProps implements [name ∷ P], which is equivalent to P but knows to
+   name itself [name] when destructed. The syntax is intended to be analogous
+   to in Gallina where you might write [forall (Hfoo: 3 < 4), ...] for a
    hypothesis that would be introduced as [Hfoo] using automatic names.
 
   To use this library, write your definitions with [name ∷ P] for each conjunct.
@@ -13,7 +13,7 @@ Set Default Proof Using "Type".
   their specified names. [iNamed] also introduces existentials with the names
   for the Coq binders.
 
-  The names in a [named] are not actually names but full-blown Iris intro
+  The names in a named proposition are not actually names but full-blown Iris intro
   patterns. This means you can write [#H] to automatically introduce to the
   persistent context, [%H] to name a pure fact (using string_to_ident), or even
   something crazy like ["[<- H]"] to destruct the hypothesis and rewrite by the
@@ -41,13 +41,13 @@ Set Default Proof Using "Type".
   can always [rewrite /named] to get rid of the names.
  *)
 
-(* Named props are just the underlying prop. We used to have this sealed, but it
-turns out that this inconveniently required many forwarding typeclass instances
-(for things like [IntoPure], [Persistent], and framing) and we didn't run into
-any issues making it completely transparent.
+(* Named props are defined to be the underlying prop. We used to have this
+sealed, but it turns out that this inconveniently required many forwarding
+typeclass instances (for things like [IntoPure], [Persistent], and framing) and
+we didn't run into any issues making it completely transparent.
 
-For efficiency reasons, don't even bother requiring P to be a PROP (this
-introduces an extra coercion to the carrier) *)
+For efficiency reasons, we don't have [(PROP:bi) (P:PROP)], since this requires
+a coercion to the carrier of [PROP]. *)
 Definition named {A} (name: string) (P: A): A := P.
 
 Section named.
