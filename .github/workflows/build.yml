@@ -45,7 +45,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: coq-community/docker-coq-action@v1
         with:
-          opam_file: "iris-simp-lang.opam"
           custom_image: "coqorg/coq:dev"
 # See also:
 # https://github.com/coq-community/docker-coq-action#readme
