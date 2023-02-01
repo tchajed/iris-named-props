@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - iris4.0
   pull_request:
     branches:
       - "**"
@@ -13,31 +13,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        coq:
-          - "dev"
-          - "8.15"
-          - "8.14"
-          - "8.13"
-      fail-fast: false
-    steps:
-      - uses: actions/checkout@v2
-      - uses: coq-community/docker-coq-action@v1
-        with:
-          opam_file: "iris-named-props.opam"
-          custom_image: "coqorg/coq:${{ matrix.coq }}"
-          before_install: |
-            startGroup "Add Iris repo"
-              opam repo add iris-dev https://gitlab.mpi-sws.org/iris/opam.git
-            endGroup
-            startGroup "Print opam config"
-              opam config list; opam repo list; opam list
-            endGroup
   build-release:
-    name: build (released iris, coq dev)
+    name: build (released iris, coq latest)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: coq-community/docker-coq-action@v1
         with:
-          custom_image: "coqorg/coq:dev"
+          custom_image: "coqorg/coq:latest"
 # See also:
 # https://github.com/coq-community/docker-coq-action#readme
 # https://github.com/erikmd/docker-coq-github-action-demo
