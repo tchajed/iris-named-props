@@ -15,7 +15,7 @@ those names to automatically introduce all the conjuncts in a definition.
 
 depends: [
   "coq" {>= "8.13"}
-  "coq-iris" {>= "dev.2021-04-15.0.2927fef1" | (>= "3.5.0" & < "5.0") | = "dev"}
+  "coq-iris" {>= "4.0" & < "5.0"}
 ]
 
 build: [make "-j%{jobs}%"]
