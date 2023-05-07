@@ -79,7 +79,7 @@ Section named.
     env_to_named_prop_go acc Γ = env_to_prop_go acc Γ.
   Proof.
     revert acc.
-    induction Γ; simpl; auto; intros.
+    induction Γ as [|? IHΓ i]; simpl; auto; intros.
     rewrite IHΓ.
     destruct i; simpl; auto.
   Qed.
