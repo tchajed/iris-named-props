@@ -232,9 +232,10 @@ Local Ltac iNameIntuitionistic i i' :=
   ].
 
 Local Ltac iNamePure i name :=
-  let id := string_to_ident name in
-  let id := fresh id in
-  iPure i as id.
+  string_to_ident_cps name ltac:(fun id =>
+    let id := fresh id in
+    iPure i as id
+  ).
 
 (* iNameHyp implements naming a hypothesis of the form [H: name ∷ P].
 
@@ -355,8 +356,7 @@ Ltac iFrameNamed :=
              | IIdent ?name => iFrame name
              | IIntuitionistic (IIdent ?name) => iFrame name
              | IPure (IGallinaNamed ?name) =>
-               let name := string_to_ident name in
-               iFrame (name)
+               string_to_ident_cps name ltac:(fun id => iFrame (id))
              end
            end
   end.
