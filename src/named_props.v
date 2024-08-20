@@ -142,7 +142,7 @@ Proof. Qed.
 should be split by [iNamed] as it traverses a proposition for named conjuncts.
 *)
 Class IsSplittable {PROP:bi} (P: PROP) := is_splittable {}.
-Global Arguments IsSplittable {_} _%I : assert.
+Global Arguments IsSplittable {_} _%_I : assert.
 Global Arguments is_splittable {PROP P} : assert.
 Global Instance is_splittable_sep {PROP:bi} (P Q: PROP) :
   IsSplittable (P ∗ Q).
