@@ -29,3 +29,16 @@ Tactic failure: iExact: "HP" not found.
   "H3foo" : ⌜φ⌝
   --------------------------------------∗
   P ∗ □ P ∗ ⌜φ⌝
+"test_neg_suffix_complex"
+     : string
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  P : PROP
+  φ : Prop
+  H2 : φ
+  ============================
+  "H1" : P
+  --------------------------------------∗
+  P ∗ ⌜φ⌝
