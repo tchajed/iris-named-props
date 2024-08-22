@@ -178,17 +178,17 @@ of the binder and repeats while the goal is an existential *)
 Ltac iDeexHyp H :=
   iDeex_one H; repeat iDeex_one H.
 
-Lemma tac_name_replace {PROP:bi} (i: ident) Δ p (P: PROP) Q name :
+Lemma tac_name_replace {PROP:bi} (i: ident) name name' Δ p (P: PROP) Q :
   envs_lookup i Δ = Some (p, named name P) →
-  match envs_simple_replace i p (Esnoc Enil (INamed name) P) Δ with
+  match envs_simple_replace i p (Esnoc Enil (INamed name') P) Δ with
   | Some Δ' => envs_entails Δ' Q
   | None => False
   end →
   envs_entails Δ Q.
 Proof. rewrite /named. apply coq_tactics.tac_rename. Qed.
 
-Local Ltac iNameReplace i name :=
-  eapply (tac_name_replace i _ _ _ _ name);
+Local Ltac iNameReplace i name name' :=
+  eapply (tac_name_replace i name name');
   [ first [ reduction.pm_reflexivity
           | fail 1 "iNamed: could not find" i ]
   | reduction.pm_reduce;
@@ -223,7 +223,7 @@ Proof.
 Qed.
 
 Local Ltac iNameIntuitionistic i i' :=
-  eapply (tac_name_intuitionistic _ i i' _ _ _ _ _);
+  eapply (tac_name_intuitionistic _ i i');
   [ reduction.pm_reflexivity
   | tc_solve
   | simpl; tc_solve
@@ -240,7 +240,7 @@ Local Ltac iNamePure i name :=
 
    The complete tactic is mutually recursive with iNamed_go for * patterns; this
    self-contained version takes iNamed_go as a parameter *)
-Local Ltac iNameHyp_go_rx H iNamed_go :=
+Local Ltac iNameHyp_go_rx suffix H iNamed_go :=
   let i := to_pm_ident H in
   lazymatch goal with
   | |- context[Esnoc _ i (named ?name ?P)] =>
@@ -249,14 +249,17 @@ Local Ltac iNameHyp_go_rx H iNamed_go :=
     lazymatch pat with
     | IIdent (INamed ?name) =>
       (* just rename one hypothesis *)
-      iNameReplace i name
+      let name' := eval compute in (name +:+ suffix) in
+      iNameReplace i name name'
     | IIntuitionistic (IIdent ?i') =>
-      iNameIntuitionistic i i'
+      let name' := eval compute in (i' +:+ suffix) in
+      iNameIntuitionistic i name'
     (* pure intros need to be freshened (otherwise they block using iNamed) *)
     | IPure (IGallinaNamed ?name) =>
-      iNamePure i name
+      let name' := eval compute in (name +:+ suffix) in
+      iNamePure i name'
     (* the token "*" causes iNamed to recurse *)
-    | IForall => change (Esnoc ?Δ i (named name P)) with (Esnoc Δ i P); iNamed_go i
+    | IForall => change (Esnoc ?Δ i (named name P)) with (Esnoc Δ i P); iNamed_go suffix i
     | _ =>
        (* we now do this only for backwards compatibility, which is a completely
        safe but inefficient sequence that handles persistent/non-persistent
@@ -275,13 +278,14 @@ Local Ltac iNameHyp_go_rx H iNamed_go :=
 (* The core of iNamed is destructing a spine of separating conjuncts and naming
   each conjunct with iNameHyp; the implementation currently just calls iDestruct
   and then attempts to name the new anonymous hypotheses, but it would be better
-  to parametrize the splitting and naming into a typeclass. *)
-Ltac iNamedDestruct_go_rx H iNameHyp :=
+  to parametrize the splitting and naming into a typeclass.
+  We pass suffix as a param because it's hard to curry mutually recursive ltacs. *)
+Ltac iNamedDestruct_go_rx suffix H iNameHyp :=
   (* we track the original name H0 here so that at the very end we can name the
   last conjunct if it isn't named (this is what PropRestore runs into - it can
   be destructed until a final Restore hypothesis) *)
   let rec go H0 H :=
-      first [ iNameHyp H
+      first [ iNameHyp suffix H
             | lazymatch iTypeOf H with
               | Some (_, ?P) => tc_is_inhabited (IsSplittable P)
               | None => fail 1 "iNamed: hypothesis" H "not found"
@@ -290,7 +294,7 @@ Ltac iNamedDestruct_go_rx H iNameHyp :=
               let Htmp2 := iFresh in
               let pat := constr:(IList [[IIdent Htmp1; IIdent Htmp2]]) in
               iDestruct H as pat;
-              iNameHyp Htmp1; go H0 Htmp2
+              iNameHyp suffix Htmp1; go H0 Htmp2
             | (* reaching here means the last conjunct could not be named with
               iNameHyp; rather than leave it anonymous, restore the original
               name (note this could fail if that name was used by one of the
@@ -299,23 +303,25 @@ Ltac iNamedDestruct_go_rx H iNameHyp :=
   go H H.
 
 (* this declaration defines iNamed by tying together all the mutual recursion *)
-Local Ltac iNamed_go H :=
+Local Ltac iNamed_go suffix H :=
   lazymatch H with
-  | 1%Z => let i := iFresh in iIntros i; iNamed_go i
-  | 1%nat => let i := iFresh in iIntros i; iNamed_go i
+  | 1%Z => let i := iFresh in iIntros i; iNamed_go suffix i
+  | 1%nat => let i := iFresh in iIntros i; iNamed_go suffix i
   | _ =>
     (* first destruct the existentials, then split the conjuncts (but
     importantly only these two levels; the user must explicitly opt-in to
     destructing more existentials for conjuncts) *)
     try iDeexHyp H;
-    iNamedDestruct_go H
+    iNamedDestruct_go suffix H
   end with
-  (* Ltac *) iNameHyp_go H :=
-  iNameHyp_go_rx H iNamed_go with
-  (* Ltac *) iNamedDestruct_go H := iNamedDestruct_go_rx H iNameHyp_go.
+  (* Ltac *)
+  iNameHyp_go suffix H := iNameHyp_go_rx suffix H iNamed_go with
+  (* Ltac *)
+  iNamedDestruct_go suffix H := iNamedDestruct_go_rx suffix H iNameHyp_go.
 
-Tactic Notation "iNamedDestruct" constr(H) := iNamedDestruct_go H.
-Tactic Notation "iNamed" constr(H) := iNamed_go H.
+Tactic Notation "iNamedDestruct" constr(H) := iNamedDestruct_go "" H.
+Tactic Notation "iNamed" constr(H) := iNamed_go "" H.
+Tactic Notation "iNamedSuffix" constr(H) constr(suffix) := iNamed_go suffix H.
 
 (* iNamed names any hypotheses that are anonymous but have a name. This is
 primarily useful when you for some reason need to introduce using ? and then
@@ -324,7 +330,7 @@ wouldn't work for all the conjuncts) *)
 Tactic Notation "iNamed" :=
   repeat match goal with
          | |- context[Esnoc _ ?i (named ?name ?P)] =>
-           iNameHyp_go i
+           iNameHyp_go "" i
          (* TODO: debug this for destructing anonymous composites *)
          (* | |- context[Esnoc _ ?i ?P] =>
            lazymatch P with
@@ -334,7 +340,7 @@ Tactic Notation "iNamed" :=
 
 (* iNameHyp only introduces names for a single hypothesis (and is usually not
 useful on its own) *)
-Ltac iNameHyp H := iNameHyp_go H.
+Ltac iNameHyp H := iNameHyp_go "" H.
 
 Tactic Notation "iNamedAccu" :=
   iStartProof; eapply tac_named_accu; [ (* only one goal should spawn *)

@@ -15,3 +15,30 @@ Tactic failure: iExact: "HP" not found.
   ============================
   --------------------------------------∗
   "H1" ∷ P1 ∗ "H2" ∷ P2 i -∗ P1 ∗ P2 i
+"test_suffix"
+     : string
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  P : PROP
+  φ : Prop
+  ============================
+  "H1foo" : P
+  "H2foo" : □ P
+  "H3foo" : ⌜φ⌝
+  --------------------------------------∗
+  P ∗ □ P ∗ ⌜φ⌝
+"test_neg_suffix_complex"
+     : string
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  P : PROP
+  φ : Prop
+  H2 : φ
+  ============================
+  "H1" : P
+  --------------------------------------∗
+  P ∗ ⌜φ⌝

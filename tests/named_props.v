@@ -316,4 +316,29 @@ Section tests.
     iFrame "H1 H2".
   Qed.
 
+  Check "test_suffix".
+  Example test_suffix P φ :
+    "H1" ∷ P ∗
+    "H2" ∷ □ P ∗
+    "H3" ∷ ⌜ φ ⌝ -∗
+    P ∗ □ P ∗ ⌜ φ ⌝.
+  Proof.
+    iIntros "H".
+    iNamedSuffix "H" "foo".
+    Show.
+    iFrame "∗#%".
+  Qed.
+
+  (* This is a negative test.
+  iNamedSuffix is not able to handle complex ipats. *)
+  Check "test_neg_suffix_complex".
+  Example test_neg_suffix_complex P φ :
+    named "[H1 %H2]" (P ∗ ⌜ φ ⌝) -∗ P ∗ ⌜ φ ⌝.
+  Proof.
+    iIntros "H".
+    iNamedSuffix "H" "foo".
+    Show.
+    iFrame "∗%".
+  Qed.
+
 End tests.
