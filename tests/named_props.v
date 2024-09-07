@@ -288,6 +288,7 @@ Section tests.
     iFrameNamed.
   Qed.
 
+  Import named_props_ascii_notation.
   Check "test_parse_ascii".
   Example test_parse_ascii P1 P2 :
     (* the ∧ needs parentheses regardless of [::] or [∷] because [∧] is actually

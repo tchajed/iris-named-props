@@ -371,14 +371,18 @@ that you can change [P ∗ Q] to ["HP" ∷ P ∗ "HQ" ∷ Q] without adding pare
 to attach the names correctly *)
 Notation "name ∷ P" := (named name P%I) (at level 79).
 
-(* This ASCII alternative is an alternative that avoid setting up input for ∷ (\Colon by default, if it's even available).
+Module named_props_ascii_notation.
+(* This ASCII alternative is an alternative that avoid setting up input for ∷
+(\Colon by default, if it's even available). However, it overrides :: for cons
+in bi_scope.
 
-This notation is the same as the [cons] notation and therefore must be at level
-60. In practice this should work out as well as level 79, because the relevant
-notations like ∧, ∨, ⌜⌝ are not between 60 and 79.
+This notation must be at level 60. In practice this should work out as well as
+level 79, because the relevant notations like ∧, ∨, ⌜⌝ are not between 60 and
+79.
  *)
 Notation "name :: P" := (named name P%I) (only parsing,
                             at level 60, P at level 60) : bi_scope.
+End named_props_ascii_notation.
 
 (* Enable eauto to solve goals where the top-level is [named] *)
 Global Hint Extern 0 (environments.envs_entails _ (named _ _)) => unfold named : core.

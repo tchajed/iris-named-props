@@ -60,3 +60,8 @@ prove `Q1` on the left, use `iNamedAccu` to fill `?rest` with the remaining
 hypotheses, and then use `iNamed 1` in the second goal to get back all the
 remaining hypotheses. The upshot is that you don't need to decide upfront how to
 split the context.
+
+If you don't want to use the unicode symbol `∷`, you can import
+`named_props_ascii_notation` to get `::` in `bi_scope`. However, note that this
+conflicts with `::` as a notation for `cons`, which will now require `%list` if
+you want to use it.
