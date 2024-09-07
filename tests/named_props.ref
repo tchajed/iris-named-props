@@ -2,6 +2,16 @@ The command has indeed failed with message:
 Tactic failure: iDeexHyp: "foo" not found.
 The command has indeed failed with message:
 Tactic failure: iExact: "HP" not found.
+"test_parse_ascii"
+     : string
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  P1, P2 : PROP
+  ============================
+  "%Hwf" ∷ False ∗ "#H1" ∷ (□ P1 ∧ P2) ∗ "H2" ∷ P2 -∗
+  "%Hwf" ∷ False ∗ "#H1" ∷ P1 ∗ "H2" ∷ P2
 "test_monpred_named"
      : string
 1 goal

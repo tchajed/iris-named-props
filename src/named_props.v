@@ -366,10 +366,19 @@ Ltac iFrameNamed :=
            end
   end.
 
-(* this is crucially placed just below level 80, which is where ∗ is, so that
-you can change [P ∗ Q] to ["HP" ∷ P ∗ "HQ" ∷ Q] without adding parentheses to
-attach the names correctly *)
+(* The notation is crucially placed just below level 80, which is where ∗ is, so
+that you can change [P ∗ Q] to ["HP" ∷ P ∗ "HQ" ∷ Q] without adding parentheses
+to attach the names correctly *)
 Notation "name ∷ P" := (named name P%I) (at level 79).
+
+(* This ASCII alternative is an alternative that avoid setting up input for ∷ (\Colon by default, if it's even available).
+
+This notation is the same as the [cons] notation and therefore must be at level
+60. In practice this should work out as well as level 79, because the relevant
+notations like ∧, ∨, ⌜⌝ are not between 60 and 79.
+ *)
+Notation "name :: P" := (named name P%I) (only parsing,
+                            at level 60, P at level 60) : bi_scope.
 
 (* Enable eauto to solve goals where the top-level is [named] *)
 Global Hint Extern 0 (environments.envs_entails _ (named _ _)) => unfold named : core.

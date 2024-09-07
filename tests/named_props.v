@@ -288,6 +288,17 @@ Section tests.
     iFrameNamed.
   Qed.
 
+  Check "test_parse_ascii".
+  Example test_parse_ascii P1 P2 :
+    (* the ∧ needs parentheses regardless of [::] or [∷] because [∧] is actually
+    at level 80 with [∗] *)
+    "%Hwf" ∷ ⌜False⌝ ∗ "#H1" :: (□ P1 ∧ P2) ∗ "H2" :: P2 -∗
+    "%Hwf" :: ⌜False⌝ ∗ "#H1" ∷ P1 ∗ "H2" :: P2.
+  Proof. Show. Abort.
+
+  (* make sure ASCII notation doesn't conflict with cons notation *)
+  Definition use_cons_notation := 1 :: 2 :: 3 :: nil.
+
   Example test_inamedaccu_serialize P1 P2 :
     P1 ∗
     P1 ∗ P2 ∗
