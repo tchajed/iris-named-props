@@ -19,6 +19,7 @@ jobs:
       matrix:
         coq:
           - "dev"
+          - "8.20"
           - "8.19"
           # 8.18 specifically has different output
           # - "8.18"
