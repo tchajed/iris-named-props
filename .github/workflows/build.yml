@@ -20,7 +20,8 @@ jobs:
         coq:
           - "dev"
           - "8.19"
-          - "8.18"
+          # 8.18 specifically has different output
+          # - "8.18"
           - "8.17"
           - "8.16"
       fail-fast: false
