@@ -193,7 +193,7 @@ Local Ltac iNameReplace i name name' :=
           | fail 1 "iNamed: could not find" i ]
   | reduction.pm_reduce;
     lazymatch goal with
-    | |- False => fail 1 "iNamed: name in not fresh" i
+    | |- False => fail 1 "iNamed: name not fresh" i
     | _ => idtac
     end
   ].
@@ -224,10 +224,15 @@ Qed.
 
 Local Ltac iNameIntuitionistic i i' :=
   eapply (tac_name_intuitionistic _ i i');
-  [ reduction.pm_reflexivity
+  [ first [ reduction.pm_reflexivity
+          | fail 1 "iNamed: could not find" i ]
   | tc_solve
   | simpl; tc_solve
-  | reduction.pm_reduce
+  | reduction.pm_reduce;
+    lazymatch goal with
+    | |- False => fail 1 "iNamed: name not fresh" i
+    | _ => idtac
+    end
   ].
 
 Local Ltac iNamePure i name :=
