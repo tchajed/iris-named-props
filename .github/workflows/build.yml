@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        coq:
+        coq_version:
           - "dev"
           - "8.20"
           - "8.19"
@@ -31,7 +31,7 @@ jobs:
       - uses: coq-community/docker-coq-action@v1
         with:
           opam_file: "iris-named-props.opam"
-          custom_image: "coqorg/coq:${{ matrix.coq }}"
+          coq_version: ${{ matrix.coq_version }}
           before_install: |
             startGroup "Add Iris repo"
               opam repo add iris-dev https://gitlab.mpi-sws.org/iris/opam.git
