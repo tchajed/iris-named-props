@@ -1,3 +1,4 @@
 -Q src iris_named_props
 
 src/named_props.v
+src/custom_syntax.v
