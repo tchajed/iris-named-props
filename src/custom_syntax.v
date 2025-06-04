@@ -35,6 +35,7 @@ Inductive token :=
   | TMinus : token
   | TSep : token
   | TArrow : direction → token
+  (* new *)
   | TNamed : token.
 
 Inductive state :=
@@ -67,7 +68,6 @@ Fixpoint tokenize_go (s : string) (k : list token) (kn : state) : list token :=
   | String "%" s => tokenize_go s (cons_state kn k) (SPure "")
   | String "#" s => tokenize_go s (TIntuitionistic :: cons_state kn k) SNone
   | String ">" s => tokenize_go s (TModal :: cons_state kn k) SNone
-  | String "@" s => tokenize_go s (TNamed :: cons_state kn k) SNone
   | String "!" (String "%" s) => tokenize_go s (TPureIntro :: cons_state kn k) SNone
   | String "!" (String "#" s) => tokenize_go s (TIntuitionisticIntro :: cons_state kn k) SNone
   | String "!" (String ">" s) => tokenize_go s (TModalIntro :: cons_state kn k) SNone
@@ -84,6 +84,8 @@ Fixpoint tokenize_go (s : string) (k : list token) (kn : state) : list token :=
       (String (Ascii.Ascii false false false true false false false true)
       (String (Ascii.Ascii true true true false true false false true) s)) =>
      tokenize_go s (TSep :: cons_state kn k) SNone
+  (* new *)
+  | String "@" s => tokenize_go s (TNamed :: cons_state kn k) SNone
   | String a s =>
      (* TODO: Complain about invalid characters, to future-proof this
      against making more characters special. *)
@@ -297,9 +299,9 @@ Ltac _iIntros_go pats startproof :=
      rename_by_string i s;
      _iIntros_go pats startproof
   | IPure IGallinaAnon :: ?pats => _iIntro (?); _iIntros_go pats startproof
-  | IIntuitionistic (IIdent ?H) :: ?pats => _iIntro_persistent H; _iIntros_go pats false
-  | IDrop :: ?pats => _iIntro_drop; _iIntros_go pats startproof
-  | IIdent ?H :: ?pats => _iIntro_spatial H; _iIntros_go pats startproof
+  | IIntuitionistic (IIdent ?H) :: ?pats => _iIntroPersistent H; _iIntros_go pats false
+  | IDrop :: ?pats => _iIntroDrop; _iIntros_go pats startproof
+  | IIdent ?H :: ?pats => _iIntroSpatial H; _iIntros_go pats startproof
   (* Introduction patterns that can only occur at the top-level *)
   | IPureIntro :: ?pats => iPureIntro; _iIntros_go pats false
   | IModalIntro :: ?pats => iModIntro; _iIntros_go pats false
@@ -312,9 +314,9 @@ Ltac _iIntros_go pats startproof :=
   | IDone :: ?pats => try done; _iIntros_go pats startproof
   (* Introduction + destruct *)
   | IIntuitionistic ?pat :: ?pats =>
-     let H := iFresh in _iIntro_persistent H; iDestructHyp H as pat; _iIntros_go pats false
+     let H := iFresh in _iIntroPersistent H; iDestructHyp H as pat; _iIntros_go pats false
   | ?pat :: ?pats =>
-     let H := iFresh in _iIntro_spatial H; iDestructHyp H as pat; _iIntros_go pats false
+     let H := iFresh in _iIntroSpatial H; iDestructHyp H as pat; _iIntros_go pats false
   end
   end.
 
