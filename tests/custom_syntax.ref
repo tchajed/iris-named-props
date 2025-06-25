@@ -1,0 +1,42 @@
+"test_pure_pattern_freshen"
+     : string
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  φ, φ' : Prop
+  P : PROP
+  H : φ
+  H0 : φ'
+  ============================
+  --------------------------------------∗
+  ⌜φ ∧ φ'⌝
+"test_destruct_named"
+     : string
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  P, Q : PROP
+  ============================
+  "H1" : P
+  "H2" : P
+  "H3" : Q
+  "H4" : Q
+  --------------------------------------∗
+  P ∗ Q ∗ P ∗ Q
+"test_destruct_pat"
+     : string
+1 goal
+  
+  PROP : bi
+  Haffine : BiAffine PROP
+  foo : Prop
+  P, Q : PROP
+  Hfoo : foo
+  ============================
+  "HQ" : Q
+  "HP2" : P
+  "HP" : P
+  --------------------------------------∗
+  ⌜foo⌝ ∗ P ∗ Q ∗ P
