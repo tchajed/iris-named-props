@@ -17,6 +17,7 @@ Section proof.
     iSplitL "H1"; [ iExact "H1" | iExact "H2" ].
   Qed.
 
+  Check "test_pure_pattern_freshen".
   Example test_pure_pattern_freshen φ φ' P :
     "%H" ∷ ⌜φ⌝ -∗
     "%H" ∷ ⌜φ'⌝ -∗
@@ -24,9 +25,11 @@ Section proof.
     ⌜φ ∧ φ'⌝ ∗ P.
   Proof.
     iIntros "@ @ $".
+    Show.
     iPureIntro; exact (conj H H0).
   Qed.
 
+  Check "test_destruct_named".
   Example test_destruct_named P Q :
     ⊢ "H1" ∷ P ∗
       "H2" ∷ P ∗
@@ -36,9 +39,11 @@ Section proof.
       P ∗ Q ∗ P ∗ Q.
   Proof.
     iIntros "@".
+    Show.
     iFrame.
   Qed.
 
+  Check "test_destruct_pat".
   Example test_destruct_pat (foo: Prop) P Q :
     ⊢ "[%Hfoo HP]" ∷ (⌜foo⌝ ∗ P) ∗
       "HQ" ∷ Q ∗
@@ -47,6 +52,7 @@ Section proof.
       ⌜foo⌝ ∗ P ∗ Q ∗ P.
   Proof.
     iIntros "@".
+    Show.
     iFrame "HP HQ HP2".
     iPureIntro; exact Hfoo.
   Qed.
