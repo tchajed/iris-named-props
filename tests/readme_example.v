@@ -1,5 +1,6 @@
 From iris.proofmode Require Import tactics.
 From iris_named_props Require Import named_props.
+From iris_named_props Require Import custom_syntax.
 
 Section demo.
 Context {PROP: bi} `{Haff: BiAffine PROP}.
@@ -22,6 +23,11 @@ Proof using Haff.
 
   *)
   iExact "HP".
+Qed.
+
+Theorem foo_rep_read_P_custom : foo_rep -∗ P.
+Proof using Haff.
+  iIntros "@". iExact "HP".
 Qed.
 
 End demo.

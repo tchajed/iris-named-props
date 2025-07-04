@@ -1,6 +1,6 @@
 # Named propositions for Iris
 
-[![CI](https://github.com/tchajed/iris-named-props/workflows/CI/badge.svg)](https://github.com/tchajed/iris-named-props/actions/workflows/build.yml?query=workflow%3ACI)
+[![CI](https://github.com/tchajed/iris-named-props/actions/workflows/build.yml/badge.svg)](https://github.com/tchajed/iris-named-props/actions/workflows/build.yml)
 
 Named propositions are an extension to the Iris Proof Mode (IPM) that allow you
 to embed names for conjuncts within a definition and then use those names to
@@ -8,7 +8,7 @@ introduce or destruct the definition. See the header comment in
 [named_props.v](src/named_props.v) for a detailed explanation with the entire
 API.
 
-This library is compatible with the latest version of Iris and Coq 8.16+.
+This library is compatible with the development version of Iris and Coq 8.20+.
 
 ```coq
 From iris.proofmode Require Import tactics.
@@ -32,6 +32,17 @@ Proof.
 
  *)
  iExact "HP".
+Qed.
+```
+
+If you add `From iris_named_props Require Import custom_syntax`, you can use a
+new `@` intro pattern:
+
+```coq
+Theorem foo_rep_read_P_custom :
+  foo_rep -∗ P.
+Proof.
+ iIntros "@". iExact "HP".
 Qed.
 ```
 
