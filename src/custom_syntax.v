@@ -342,7 +342,7 @@ Ltac _iDestructHypGo Hz pat0 pat :=
      | INamed ?Hz => let Hz' := iFresh in iRename Hz into Hz'
      end
   | IDrop => _iClearHyp Hz
-  | IFrame => iFrameHyp Hz
+  | IFrame => iFrame Hz
   | IIdent Hz => idtac
   | IIdent ?y => iRename Hz into y
   | INamedPat => iNamed Hz
