@@ -35,6 +35,9 @@ jobs:
             startGroup "Add Iris repo"
               opam repo add iris-dev https://gitlab.mpi-sws.org/iris/opam.git
             endGroup
+            startGroup "opam update"
+              opam update -y
+            endGroup
             startGroup "Print opam config"
               opam config list; opam repo list; opam list
             endGroup
