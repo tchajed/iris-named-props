@@ -1,4 +1,4 @@
-From iris.proofmode Require Import tactics monpred.
+From iris.proofmode Require Import proofmode monpred.
 From iris_named_props Require Import named_props.
 
 Section bi.
