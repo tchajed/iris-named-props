@@ -1,4 +1,4 @@
-From iris.proofmode Require Import tactics.
+From iris.proofmode Require Import proofmode.
 From iris_named_props Require Import named_props.
 
 Set Default Proof Using "All".

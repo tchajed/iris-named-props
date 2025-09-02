@@ -1,5 +1,5 @@
 From iris.proofmode Require Import string_ident.
-From iris.proofmode Require Import tactics environments intro_patterns monpred.
+From iris.proofmode Require Import proofmode environments intro_patterns monpred.
 
 Set Default Proof Using "Type".
 
