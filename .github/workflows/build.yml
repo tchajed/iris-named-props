@@ -27,7 +27,7 @@ jobs:
           # - "8.18"
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: rocq-community/docker-coq-action@v1
         with:
           opam_file: "iris-named-props.opam"
@@ -40,6 +40,20 @@ jobs:
             startGroup "Print opam config"
               opam config list; opam repo list; opam list
             endGroup
+  # build using a released version of Iris
+  build-released-iris:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        coq_version:
+          - "latest"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: rocq-community/docker-coq-action@v1
+        with:
+          opam_file: "iris-named-props.opam"
+          coq_version: ${{ matrix.coq_version }}
+          ocaml_version: "default"
 
 # See also:
 # https://github.com/coq-community/docker-coq-action#readme
